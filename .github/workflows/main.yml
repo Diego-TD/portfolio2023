@@ -1,0 +1,26 @@
+name: CI/CD Pipeline
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Run HTML Validation Test
+        run: npm test
+
+      - name: Deploy to Vercel
+        if: ${{ success() }}
+        uses: vercel/actions@v20
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
